@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../CUSTOM SPI LIBRARY"
+		},
+		{
+			"name": "xtensa blink",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
