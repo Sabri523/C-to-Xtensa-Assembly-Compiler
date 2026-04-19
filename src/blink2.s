@@ -25,6 +25,7 @@ _start:
 .literal .L_GPIO_OUTPUT_W1TS, 0x60000304
 .literal .L_GPIO_OUTPUT_W1TC, 0x60000308
 .literal .L_GPIO_IN, 0x60000318
+
 .literal .L_GPIO2_MASK, 0x04
 .literal .L_GPIO4_MASK, 0x10
 .literal .L_GPIO5_MASK, 0x20
