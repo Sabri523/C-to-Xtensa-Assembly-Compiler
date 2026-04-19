@@ -1,6 +1,6 @@
 @echo off
 echo Step 1: Assembling
-xtensa-lx106-elf-as -o blink.o blink.s
+xtensa-lx106-elf-as -o blink.o blink2.s
 if errorlevel 1 goto error
 
 echo Step 2: Linking

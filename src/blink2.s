@@ -27,6 +27,7 @@ _start:
 .literal .L_GPIO_IN, 0x60000318
 .literal .L_GPIO2_MASK, 0x04
 .literal .L_GPIO4_MASK, 0x10
+.literal .L_GPIO5_MASK, 0x20
 .literal .L_GPIO12_MASK, 0x1000
 .literal .L_GPIO13_MASK, 0x2000
 .literal .L_GPIO14_MASK, 0x4000
@@ -41,60 +42,49 @@ _main:
     movi a3, 0
     s32i a3, a2, 0
 
-    # turn 4 into gpio through L_MUX
-    l32r a2, .L_GPIO2_MUX
-    movi a3, 0x08
-    s32i a3, a2, 0
-
     l32r a2, .L_GPIO4_MUX
-    movi a3, 0x08
-    s32i a3, a2, 0
-
-    l32r a2, .L_GPIO12_MUX
     movi a3, 0x00
     s32i a3, a2, 0
 
-    # enable gpio4 output
-    l32r a2, .L_GPIO_ENABLE_W1TS
-    l32r a3, .L_GPIO2_MASK
+    l32r a2, .L_GPIO12_MUX
+    movi a3, 0x31
     s32i a3, a2, 0
 
     l32r a2, .L_GPIO_ENABLE_W1TS
     l32r a3, .L_GPIO4_MASK
     s32i a3, a2, 0
-
-blink_loop:
-    # gpio4 on
-    l32r a2, .L_GPIO_OUTPUT_W1TS
-    l32r a3, .L_GPIO2_MASK
-    s32i a3, a2, 0
-
-    l32r a2, .L_GPIO_OUTPUT_W1TS
-    l32r a3, .L_GPIO4_MASK
-    s32i a3, a2, 0
-
-    l32r a4, .L_Delay
-
-delay1:
-    addi a4,a4,-1
-    bnez a4,delay1
-
-    l32r a2, .L_GPIO_OUTPUT_W1TC
-    l32r a3, .L_GPIO2_MASK
-    s32i a3,a2,0
-
-    l32r a2, .L_GPIO_OUTPUT_W1TC
-    l32r a3, .L_GPIO4_MASK
-    s32i a3,a2,0
-
-    l32r a4, .L_Delay
-
-delay2:
-    addi a4, a4, -1
-    bnez a4, delay2
-
-    j blink_loop
-
-
-
     
+    l32r a2, .L_GPIO_ENABLE_W1TS
+    l32r a3, .L_GPIO12_MASK
+    s32i a3, a2, 0
+
+read:
+    l32r a2, .L_GPIO_IN
+    l32i a4, a2, 0
+    l32r a3, .L_GPIO4_MASK
+    and a5, a4, a3
+    bnez a5, read
+    j blink
+    
+
+blink:
+    l32r a2, .L_GPIO_OUTPUT_W1TS
+    l32r a3, .L_GPIO12_MASK
+    s32i a3, a2, 0
+    l32r a4, .L_Delay
+
+    call0 delay
+
+    l32r a2, .L_GPIO_OUTPUT_W1TC
+    l32r a3, .L_GPIO12_MASK
+    s32i a3, a2, 0
+    l32r a4, .L_Delay
+
+    call0 delay
+
+    j read
+
+delay:
+    addi a4, a4, -1
+    bnez a4, delay
+    ret
