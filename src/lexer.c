@@ -13,6 +13,12 @@ int is_empty_line(const char *line) {
     return 1; // only whitespace
 }
 
+void remove_leading_white_space(char *s)
+{
+    int i = 0, j=0;
+    while (s[i] == ' ') i++;
+    while (s[j++] = s[i++]);
+}
 
 int main() {
   FILE *fptr;
@@ -31,12 +37,14 @@ int main() {
     else {
         //myString[strcspn(myString, ":")+1] = '\0';
         myString[strcspn(myString, "#")] = '\0';
+        remove_leading_white_space(myString);
         printf("%s", myString);
+        
     }
   }
 
   // Close the file
-  fclose(fptr);
+    fclose(fptr);
 
   return 0;
 }
